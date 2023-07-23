@@ -29,7 +29,7 @@ const saveData = (value: Note) => {
 </script>
 
 <template>
-  <add-note-modal v-if="modal.isShow" @add-data="saveData" />
+  <add-note-modal v-if="modal.isShow" @add-data="saveData" @close-modal="toggleModal(false)" />
   <div class="">
     <div class="border-b mb-4 p-4 shadow-lg">
       <span class="text-3xl font-bold">My Notes</span>
@@ -47,7 +47,8 @@ const saveData = (value: Note) => {
           v-for="note in notes"
           v-else
           :key="note.title"
-          class="border rounded-md p-4 flex flex-col h-36 min-w-[24rem] m-2"
+          class="border rounded-md p-4 flex flex-col h-36 min-w-[24rem] m-2 hover:cursor-pointer hover:shadow-md transition"
+          @click="toggleModal(true)"
         >
           <span class="font-semibold text-3xl">{{ note.title }}</span>
           <span class="overflow-ellipsis whitespace-normal overflow-hidden">{{ note.note }}</span>
