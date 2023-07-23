@@ -1,20 +1,30 @@
 <script setup lang="ts">
-import MiButton from '@/components/global/MiButton.vue'
+import { onMounted, reactive } from 'vue'
 import MiModal from '@/components/global/MiModal.vue'
+import MiButton from '@/components/global/MiButton.vue'
 import MiInput from '@/components/global/MiInput.vue'
-import { reactive } from 'vue'
 import { Note } from '@/entities/note'
-
-const modal = reactive({
-  title: '',
-  note: '',
-  isShow: false
-})
 
 const emit = defineEmits<{
   addData: [data: Note]
   closeModal: []
 }>()
+
+const props = defineProps<{
+  note: Note | null
+}>()
+
+const modal = reactive({
+  title: '',
+  note: ''
+})
+
+onMounted(() => {
+  if (props.note) {
+    modal.note = props.note.note
+    modal.title = props.note.title
+  }
+})
 
 const saveNote = () => {
   emit('addData', { title: modal.title, note: modal.note })

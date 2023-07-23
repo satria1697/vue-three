@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MiButton from '@/components/global/MiButton.vue'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import AddNoteModal from '@/views/component/AddNoteModal.vue'
 import { Note } from '@/entities/note'
 
@@ -10,7 +10,12 @@ const modal = reactive({
 
 const notes = reactive<Array<Note>>([])
 
-const toggleModal = (state?: boolean) => {
+const detailNote = ref<Note | null>(null)
+
+const toggleModal = (state?: boolean, note?: Note) => {
+  if (note) {
+    detailNote.value = note
+  }
   if (typeof state == 'boolean') {
     modal.isShow = state
     return
@@ -29,7 +34,12 @@ const saveData = (value: Note) => {
 </script>
 
 <template>
-  <add-note-modal v-if="modal.isShow" @add-data="saveData" @close-modal="toggleModal(false)" />
+  <add-note-modal
+    v-if="modal.isShow"
+    :note="detailNote"
+    @add-data="saveData"
+    @close-modal="toggleModal(false)"
+  />
   <div class="">
     <div class="border-b mb-4 p-4 shadow-lg">
       <span class="text-3xl font-bold">My Notes</span>
@@ -48,7 +58,7 @@ const saveData = (value: Note) => {
           v-else
           :key="note.title"
           class="border rounded-md p-4 flex flex-col h-36 min-w-[24rem] m-2 hover:cursor-pointer hover:shadow-md transition"
-          @click="toggleModal(true)"
+          @click="toggleModal(true, note)"
         >
           <span class="font-semibold text-3xl">{{ note.title }}</span>
           <span class="overflow-ellipsis whitespace-normal overflow-hidden">{{ note.note }}</span>
