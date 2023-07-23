@@ -39,7 +39,7 @@ const saveData = (value: Note) => {
       <mi-button text="Add Notes" @click="toggleModal(true)" />
     </div>
     <div>
-      <div class="w-1/3 mx-4">
+      <div class="mx-4 flex flex-wrap">
         <div v-if="!notes.length">
           <span>Empty Notes</span>
         </div>
@@ -47,7 +47,7 @@ const saveData = (value: Note) => {
           v-for="note in notes"
           v-else
           :key="note.title"
-          class="border rounded-md p-4 flex flex-col h-36"
+          class="border rounded-md p-4 flex flex-col h-36 min-w-[24rem] m-2"
         >
           <span class="font-semibold text-3xl">{{ note.title }}</span>
           <span class="overflow-ellipsis whitespace-normal overflow-hidden">{{ note.note }}</span>
