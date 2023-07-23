@@ -1,21 +1,14 @@
 <script setup lang="ts">
 import MiButton from '@/components/global/MiButton.vue'
-import MiModal from '@/components/global/MiModal.vue'
 import { reactive } from 'vue'
-import MiInput from '@/components/global/MiInput.vue'
-
-interface Note {
-  title: string
-  note: string
-}
-
-const notes = reactive<Array<Note>>([])
+import AddNoteModal from '@/views/component/AddNoteModal.vue'
+import { Note } from '@/entities/note'
 
 const modal = reactive({
-  title: '',
-  note: '',
   isShow: false
 })
+
+const notes = reactive<Array<Note>>([])
 
 const toggleModal = (state?: boolean) => {
   if (typeof state == 'boolean') {
@@ -25,44 +18,27 @@ const toggleModal = (state?: boolean) => {
   modal.isShow = !modal.isShow
 }
 
-const saveNote = () => {
+const saveData = (value: Note) => {
+  const { note, title } = value
   notes.push({
-    note: modal.note,
-    title: modal.title
+    title,
+    note
   })
-  modal.note = ''
-  modal.title = ''
   toggleModal(false)
 }
 </script>
 
 <template>
-  <mi-modal v-if="modal.isShow">
-    <div class="m-4">
-      <span>Add Notes</span>
-      <form class="flex flex-col space-y-4" @submit.prevent="saveNote()">
-        <div class="flex flex-col">
-          <label>Title</label>
-          <mi-input v-model="modal.title" autofocus />
-        </div>
-        <div class="flex flex-col">
-          <label>Note</label>
-          <mi-input v-model="modal.note" />
-        </div>
-        <div class="flex space-x-4">
-          <mi-button text="Cancel" @click="toggleModal(false)" />
-          <mi-button type="submit" text="Save" />
-        </div>
-      </form>
-    </div>
-  </mi-modal>
-  <div class="m-4">
-    <div class="flex space-x-4">
+  <add-note-modal v-if="modal.isShow" @add-data="saveData" />
+  <div class="">
+    <div class="border-b mb-4 p-4 shadow-lg">
       <span class="text-3xl font-bold">My Notes</span>
+    </div>
+    <div class="flex space-x-8 mx-4 mb-4">
+      <span class="text-2xl font-semibold">List note</span>
       <mi-button text="Add Notes" @click="toggleModal(true)" />
     </div>
     <div>
-      <span class="text-2xl font-semibold">List note</span>
       <div class="w-1/3 mx-4">
         <div v-if="!notes.length">
           <span>Empty Notes</span>
